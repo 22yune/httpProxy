@@ -1,9 +1,9 @@
 package com.galen.program.netty.httpProxy;
 
-import com.xquant.platform.component.communication.netty.DefaultTcpClientConfig;
-import com.xquant.platform.component.communication.netty.TcpClientConfig;
-import com.xquant.platform.component.communication.netty.sync.DefaultSyncTcpClient;
-import com.xquant.platform.component.communication.netty.sync.DefaultSyncTcpPoolClient;
+import com.galen.program.netty.client.DefaultTcpClientConfig;
+import com.galen.program.netty.client.TcpClientConfig;
+import com.galen.program.netty.client.sync.DefaultSyncTcpClient;
+import com.galen.program.netty.client.sync.DefaultSyncTcpPoolClient;
 import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -31,6 +31,7 @@ public class HttpProxyClient {
 
         channelConfig.addHandler(HttpClientCodec.class);
         channelConfig.getHandlerFactories().add(new TcpClientConfig.ChannelHandlerFactory(){
+            @Override
             public ChannelHandler newChannelHandler() {
                 return new HttpObjectAggregator(Integer.MAX_VALUE);
             }
