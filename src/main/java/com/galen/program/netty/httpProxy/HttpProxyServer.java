@@ -16,12 +16,13 @@ import io.netty.handler.logging.LoggingHandler;
  */
 public class HttpProxyServer {
 
-    static final int PORT = Integer.parseInt(System.getProperty("port",  "8081"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "8081"));
 
     public static void main(String[] args) throws Exception {
         new HttpProxyServer().run(PORT);
     }
-    public void run(int port) throws Exception{
+
+    public void run(int port) throws Exception {
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -35,7 +36,7 @@ public class HttpProxyServer {
             Channel ch = b.bind(port).sync().channel();
 
             System.err.println("Open your web browser and navigate to " +
-                      "http"  + "://127.0.0.1:" + port + '/');
+                    "http" + "://127.0.0.1:" + port + '/');
 
             ch.closeFuture().sync();
         } finally {

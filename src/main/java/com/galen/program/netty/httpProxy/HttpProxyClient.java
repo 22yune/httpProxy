@@ -21,16 +21,17 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 public class HttpProxyClient {
     private DefaultSyncTcpPoolClient<FullHttpResponse> channel;
 
-    public HttpProxyClient(String ip, int port){
-        this(new GenericKeyedObjectPoolConfig(),ip,port);
+    public HttpProxyClient(String ip, int port) {
+        this(new GenericKeyedObjectPoolConfig(), ip, port);
     }
-    public HttpProxyClient(GenericKeyedObjectPoolConfig poolConfig,String ip, int port){
+
+    public HttpProxyClient(GenericKeyedObjectPoolConfig poolConfig, String ip, int port) {
         DefaultTcpClientConfig channelConfig = new DefaultTcpClientConfig();
         channelConfig.setIp(ip);
         channelConfig.setPort(port);
 
         channelConfig.addHandler(HttpClientCodec.class);
-        channelConfig.getHandlerFactories().add(new TcpClientConfig.ChannelHandlerFactory(){
+        channelConfig.getHandlerFactories().add(new TcpClientConfig.ChannelHandlerFactory() {
             @Override
             public ChannelHandler newChannelHandler() {
                 return new HttpObjectAggregator(Integer.MAX_VALUE);
@@ -39,32 +40,33 @@ public class HttpProxyClient {
         channelConfig.addHandler(ChunkedWriteHandler.class);
         channelConfig.addHandler(new DefaultSyncTcpClient.SyncClientCompleteHandler<FullHttpResponse>());
 
-        channel = new DefaultSyncTcpPoolClient<FullHttpResponse>(poolConfig,channelConfig);
+        channel = new DefaultSyncTcpPoolClient<FullHttpResponse>(poolConfig, channelConfig);
     }
 
-    void close(){
+    void close() {
         channel.close();
     }
 
     /**
-     * @see #send(FullHttpRequest, long)
      * @param msg
      * @return
      * @throws Exception
+     * @see #send(FullHttpRequest, long)
      */
-    FullHttpResponse send(FullHttpRequest msg) throws Exception{
+    FullHttpResponse send(FullHttpRequest msg) throws Exception {
         return channel.send(msg);
     }
 
     /**
      * 发送请求消息，并等待回复消息收到后返回。或者超时抛出异常返回。
      * TcpClientConfig中要添加completeHandler，这里才能识别出回复消息received msg。
-     * @param msg 请求消息
+     *
+     * @param msg  请求消息
      * @param time 超时时间，时间单位为毫秒
      * @return
      * @throws Exception
      */
-    FullHttpResponse send(FullHttpRequest msg, long time) throws Exception{
+    FullHttpResponse send(FullHttpRequest msg, long time) throws Exception {
         return channel.send(msg, time);
     }
 

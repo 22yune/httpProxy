@@ -11,7 +11,7 @@ import org.junit.Test;
 public class HttpProxyServerTest {
 
     @Test
-    public void test(){
+    public void test() {
 
         try {
             new HttpProxyServer().run(8081);
